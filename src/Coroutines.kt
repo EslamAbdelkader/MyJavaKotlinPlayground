@@ -1,22 +1,18 @@
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.produce
-import kotlinx.coroutines.channels.ticker
 
 fun main() = runBlocking<Unit> {
-    //    launch {
-//        print(1)
-//        printAsync(2)
-//        print(3)
-//    }
-//    val read = System.`in`.read()
-
-//    try {
-//        failedConcurrentSum()
-//    } catch (e: ArithmeticException) {
-//        println("Computation failed with ArithmeticException")
-//        e.printStackTrace()
-//        GlobalScope
-//    }
+        launch {
+        print(1)
+        printAsync(2)
+        print(3)
+    }
+    try {
+        failedConcurrentSum()
+    } catch (e: ArithmeticException) {
+        println("Computation failed with ArithmeticException")
+        e.printStackTrace()
+        GlobalScope
+    }
 
 }
 
