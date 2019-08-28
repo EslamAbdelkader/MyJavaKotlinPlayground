@@ -1,10 +1,12 @@
+package kotlin
+
 import kotlinx.coroutines.*
 
 fun main() = runBlocking<Unit> {
         launch {
         print(1)
-        printAsync(2)
-        print(3)
+            printAsync(2)
+            print(3)
     }
     try {
         failedConcurrentSum()

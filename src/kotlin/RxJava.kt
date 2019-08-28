@@ -1,3 +1,5 @@
+package kotlin
+
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
@@ -6,11 +8,21 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 fun main() {
-    behaviorSubject()
+    Observable.fromCallable { println("subscribe on: ${Thread.currentThread().name}") }
+        .subscribeOn(Schedulers.computation())
+        .observeOn(Schedulers.from(Executors.newSingleThreadExecutor()))
+        .subscribeOn(Schedulers.io())
+        .flatMap { Observable.fromCallable {  println("subscribe on: ${Thread.currentThread().name}") } }
+        .observeOn(Schedulers.from(Executors.newSingleThreadExecutor()))
+        .observeOn(Schedulers.io())
+        .subscribe {
+            println("observe on: ${Thread.currentThread().name}")
+        }
+    Thread.sleep(10)
 }
 
 /**
- * A subject can act as both observer and observable
+ * kotlin.A subject can act as both observer and observable
  * When an observer subscribes to a behavior subject, it receives the last (or default) emitted value if any,
  * and then keeps receiving any subsequent events.
  * This can also be achieved without subjects, using replay(1).autoConnect(0) operator on an observable. The difference is
@@ -24,7 +36,7 @@ private fun behaviorSubject() {
     // creating my own non-daemon thread
     val newSingleThreadExecutor = Executors.newSingleThreadExecutor()
 
-    val observable = Observable.interval(0,1,TimeUnit.SECONDS,Schedulers.from(newSingleThreadExecutor))
+    val observable = Observable.interval(0, 1, TimeUnit.SECONDS, Schedulers.from(newSingleThreadExecutor))
 
     val behaviorSubject = BehaviorSubject.createDefault<Long>(0)
 
@@ -41,7 +53,7 @@ private fun behaviorSubject() {
 }
 
 /**
- * A subject can act as both observer and observable
+ * kotlin.A subject can act as both observer and observable
  * When an observer subscribes to a replay subject, it receives all the last emitted values if any,
  * and then keeps receiving any subsequent events.
  * This can also be achieved without subjects, using replay().autoConnect() operator on an observable. The difference is
@@ -56,7 +68,7 @@ private fun replaySubject() {
     // creating my own non-daemon thread
     val newSingleThreadExecutor = Executors.newSingleThreadExecutor()
 
-    val observable = Observable.interval(0,1,TimeUnit.SECONDS,Schedulers.from(newSingleThreadExecutor))
+    val observable = Observable.interval(0, 1, TimeUnit.SECONDS, Schedulers.from(newSingleThreadExecutor))
 
     val replaySubject = ReplaySubject.create<Long>(0)
 
@@ -75,7 +87,7 @@ private fun replaySubject() {
 /**
  * Cold observables are the ones that does its work only on subscription
  * Hot observables emits events (theoretically) constantly, whether an observer is listening or not
- * Use share to transform cold into hot. Use behaviorSubject (or replay) to transform hot into cold
+ * Use share to transform cold into hot. Use kotlin.behaviorSubject (or replay) to transform hot into cold
  */
 private fun hotVsCold() {
     // creating my own non-daemon thread
@@ -125,7 +137,7 @@ private fun map() {
 private fun concatMap() {
     Observable.range(0, 5)
         .concatMap { i ->
-            Observable.just(i, "A", "B", "C", ".")
+            Observable.just(i, "kotlin.A", "kotlin.B", "C", ".")
         }
         .blockingSubscribe { i -> print(i) }
 }
@@ -139,7 +151,7 @@ private fun concatMap() {
 private fun flatMap() {
     Observable.range(0, 5)
         .flatMap { i ->
-            Observable.just(i, "A", "B", "C", ".")
+            Observable.just(i, "kotlin.A", "kotlin.B", "C", ".")
         }
         .blockingSubscribe { i -> print(i) }
 }
@@ -154,7 +166,7 @@ private fun flatMap() {
 private fun switchMap() {
     Observable.range(0, 5)
         .switchMap { i ->
-            Observable.just(i, "A", "B", "C", ".")
+            Observable.just(i, "kotlin.A", "kotlin.B", "C", ".")
         }
         .blockingSubscribe { i -> print(i) }
 }

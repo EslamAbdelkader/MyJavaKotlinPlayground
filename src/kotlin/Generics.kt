@@ -1,17 +1,19 @@
+package kotlin
+
 import kotlin.random.Random
 
 fun main() {
     val cars: List<Car> = listOf(Car(), Tesla())
 
-//    val teslas : List<Tesla> = cars         // ERROR, List<Car> is not parent of List<Tesla>
-    val objects: List<Object> = cars       // OK, List<Car> is parent of List<Object>
+//    val teslas : List<kotlin.Tesla> = cars         // ERROR, List<kotlin.Car> is not parent of List<kotlin.Tesla>
+    val objects: List<Object> = cars       // OK, List<kotlin.Car> is parent of List<kotlin.Object>
 
 
     val manager: Manager<out Car> = Manager(Tesla())
 
     manager.get()
 
-//    manager.add(Car())            // ERROR, the add method now expects [Nothing], which means you can't use it
+//    manager.add(kotlin.Car())            // ERROR, the add method now expects [Nothing], which means you can't use it
 
     val presenter = Presenter<Car>(Car())
 
@@ -19,7 +21,7 @@ fun main() {
 
     val anotherPresenter = Presenter<Tesla>(Tesla())
 
-//    val x = Presenter<Object>(Object()) // ERROR, can't create Presenter<Object>
+//    val x = kotlin.Presenter<kotlin.Object>(kotlin.Object()) // ERROR, can't create kotlin.Presenter<kotlin.Object>
 }
 
 open class Object

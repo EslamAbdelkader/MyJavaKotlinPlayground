@@ -1,3 +1,5 @@
+package kotlin
+
 import java.util.Collections.swap
 
 fun main() {
